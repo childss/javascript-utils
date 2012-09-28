@@ -1,5 +1,7 @@
-define(function() {
-    function RePreFetch(dataLoader, dataHandler, prefetchData) {
+define(function(require) {
+    var $ = require('jquery');
+
+    function Prefresh(dataLoader, dataHandler, prefetchData) {
         var self = this;
 
         self._firstRun = true;
@@ -9,15 +11,29 @@ define(function() {
         };
 
         self.refresh = function() {
-            if (self._firstRun) {
-                dataHandler(prefetchData, true);
-            } else {
-                dataHandler(dataLoader(), false);
-            }
-
+            var wasFirstRun = self._firstRun;
             self._firstRun = false;
+
+            if (wasFirstRun && prefetchData) {
+                dataHandler(prefetchData, wasFirstRun);
+            } else {
+                var result = dataLoader(dataHandler, wasFirstRun);
+
+                if (typeof result === 'object') {
+                    var originalSuccess = result.success;
+                    result.success = function(data) {
+                        if (typeof originalSuccess === 'function') {
+                            originalSuccess(data);
+                        }
+
+                        dataHandler(data, wasFirstRun);
+                    };
+
+                    $.ajax(result);
+                }
+            }
         };
     }
 
-    return RePreFetch;
+    return Prefresh;
 });

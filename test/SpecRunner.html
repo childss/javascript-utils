@@ -8,22 +8,26 @@
     <link rel="stylesheet" type="text/css" href="lib/jasmine-1.2.0/jasmine.css">
     <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine.js"></script>
     <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="lib/mock-ajax.js"></script>
 
-    <script type="text/javascript" src="lib/requirejs/require.js"></script>
+    <script type="text/javascript" src="../lib/require.js"></script>
 
     <script type="text/javascript">
 
         requirejs.config({
             baseUrl: '../src',
             paths: {
-                _: '../test/lib/lodash/lodash'
+                '_': '../lib/lodash',
+                'jquery': '../lib/jquery'
             },
-            urlArgs: "bust=" +  (new Date()).getTime()
+            urlArgs: "bust=" + (new Date()).getTime()
         });
 
         require(['_'], function(_) {
             var specs = ["prefresh"];
-            var specPaths = _.map(specs, function(it) { return '../test/specs/' + it + '-test'; });
+            var specPaths = _.map(specs, function(it) {
+                return '../test/specs/' + it + '-test';
+            });
 
             require(specPaths, function() {
                 var jasmineEnv = jasmine.getEnv();
