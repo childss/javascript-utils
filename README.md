@@ -11,8 +11,8 @@ then end up running a page refresh because it's easy. Well, Prefresh aims to mak
 a function to load some data, a function to act on that data, and (optionally) some initial data and it will:
 
 1. Provide the initial data to the handler function on the first call to `refresh()`.
-    a. If no initial data is provided (or is given a non-true value), it will call the loader function to get the initial data.
-2. On subsequent calls to `refresh()`, it will call the loader function and then pass along the result to the handler function.
+    * If no initial data is provided (or is given a non-true value), it will call the loader function to get the initial data.
+2. On subsequent calls to `refresh()`, it will call the loader.
 
 The loader function will be called with the handler function and the prefetch state (true if the first call to init/refresh,
 false otherwise). With this you can call the handler callback yourself from an inline `success` function in a `jQuery.ajax`
