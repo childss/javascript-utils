@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Prefresh Example</title>
+    <script type="text/javascript" src="lib/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="lib/require.js"></script>
+
+    <script>
+        requirejs.config({
+            baseUrl: '..'
+        });
+
+        var data = {
+            val: 0
+        };
+
+        function loadData() {
+            data.val++;
+
+            return data;
+        }
+
+        function handleData(data, isPrefetch) {
+            var text = 'Data: ' + data.val;
+            if (isPrefetch) {
+                text += ' (from prefetch data!)'
+            }
+
+            $('#target').text(text)
+        }
+
+        require(['prefresh'], function(Prefresh) {
+            $(function() {
+                var pf = new Prefresh(loadData, handleData, { val: 0 });
+                pf.init();
+
+                $('#refresh').click(function() {
+                    pf.refresh();
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div id="target">
+
+</div>
+<input type="button" id="refresh" value="Refresh!"/>
+
+</body>
+</html>
